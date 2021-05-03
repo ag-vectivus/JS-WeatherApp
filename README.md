@@ -1,2 +1,2 @@
 WebDev Challenge: Simple VanillaJS Weather App.
-Stack: HTML, CSS (BEM + Bootstrap), JS.
+Stack: HTML, CSS (+ Bootstrap), JS.
