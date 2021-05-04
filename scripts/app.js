@@ -5,14 +5,15 @@ const card = document.querySelector(".card");
 const details = document.querySelector(".details");
 const time = document.querySelector(".time");
 const icon = document.querySelector(".icon img");
+const forecast = new Forecast();
 
 const updateUI = (data) => {
 	// destructure properties
-	const { cityDets, weather } = data;
+	const { cityDetails, weather } = data;
 
 	// update details template
 	details.innerHTML = `
-    <h5 class="my-3">${cityDets.EnglishName}</h5>
+    <h5 class="my-3">${cityDetails.EnglishName}</h5>
     <div class="my-3">${weather.WeatherText}</div>
     <div class="display-4 my-4">
       <span>${weather.Temperature.Metric.Value}</span>
@@ -33,12 +34,6 @@ const updateUI = (data) => {
 	}
 };
 
-const updateCity = async (city) => {
-	const cityDets = await getCity(city);
-	const weather = await getWeather(cityDets.Key);
-	return { cityDets, weather };
-};
-
 cityForm.addEventListener("submit", (e) => {
 	e.preventDefault();
 
@@ -47,7 +42,8 @@ cityForm.addEventListener("submit", (e) => {
 	cityForm.reset();
 
 	// update the ui with new city
-	updateCity(city)
+	forecast
+		.updateCity(city)
 		.then((data) => updateUI(data))
 		.catch((err) => console.log(err));
 
@@ -56,7 +52,10 @@ cityForm.addEventListener("submit", (e) => {
 });
 
 if (localStorage.getItem("city")) {
-	updateCity(localStorage.getItem("city"))
+	forecast
+		.updateCity(localStorage.getItem("city"))
 		.then((data) => updateUI(data))
 		.catch((err) => console.log(err));
+} else {
+	console.log("there is no city to display");
 }
